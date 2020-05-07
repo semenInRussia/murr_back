@@ -1,6 +1,9 @@
 from PIL import Image
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
+
+from murr_back import settings
 
 
 class Murren(AbstractUser):
@@ -8,6 +11,11 @@ class Murren(AbstractUser):
     email = models.EmailField(unique=True)
     murren_avatar = models.ImageField(default='default_murren_avatar.png', upload_to='murren_pics/%Y/%m/%d/',
                                       verbose_name='Аватар Муррена')
+
+    def get_absolute_url(self):
+        return settings.BASE_URL + reverse('get_murren_info_by_pk', kwargs={
+            "pk": self.pk
+        })
 
     def __str__(self):
         return self.username
